@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Soulgram.EventLogger;
 
-public class IntegrationEventLogContext : DbContext
+public sealed class IntegrationEventLogContext : DbContext
 {
     public IntegrationEventLogContext(DbContextOptions<IntegrationEventLogContext> options) : base(options)
     {
+        Database.Migrate();
     }
 
     public DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; }
