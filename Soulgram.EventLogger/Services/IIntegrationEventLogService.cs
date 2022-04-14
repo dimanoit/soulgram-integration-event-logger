@@ -4,8 +4,8 @@ namespace Soulgram.EventLogger;
 
 public interface IIntegrationEventLogService
 {
-    Task<IEnumerable<IntegrationEventLogEntry>> GetPublishedFailedLogs(CancellationToken cancellationToken);
-    Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction);
+    Task<IEnumerable<CompressedIntegrationEvent>> GetPublishedFailedEvents(CancellationToken cancellationToken);
+    Task SaveEventAsync(IntegrationEventLogEntry @event, IDbContextTransaction transaction);
 
     Task MarkEventAsPublishedAsync(Guid eventId);
     Task MarkEventAsInProgressAsync(Guid eventId);

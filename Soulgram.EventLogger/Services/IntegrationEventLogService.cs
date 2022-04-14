@@ -12,28 +12,28 @@ public class IntegrationEventLogService : IIntegrationEventLogService
         _integrationEventLogContext = integrationEventLogContext;
     }
 
-    public async Task<IEnumerable<IntegrationEventLogEntry>> GetPublishedFailedLogs(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CompressedIntegrationEvent>> GetPublishedFailedEvents(
+        CancellationToken cancellationToken)
     {
         var eventLogs = await _integrationEventLogContext
             .IntegrationEventLogs
             .AsNoTracking()
             .Where(x => x.State == EventStateEnum.PublishedFailed)
+            .Select(x => x.ToCompressedEvent())
             .ToArrayAsync(cancellationToken);
 
         return eventLogs;
     }
 
-    public Task SaveEventAsync(IntegrationEvent @event, IDbContextTransaction transaction)
+    public Task SaveEventAsync(IntegrationEventLogEntry @event, IDbContextTransaction transaction)
     {
         if (transaction == null)
         {
             throw new ArgumentNullException(nameof(transaction));
         }
 
-        var eventLogEntry = @event.ToIntegrationEventLogEntry(transaction.TransactionId);
-
         _integrationEventLogContext.Database.UseTransaction(transaction.GetDbTransaction());
-        _integrationEventLogContext.IntegrationEventLogs.Add(eventLogEntry);
+        _integrationEventLogContext.IntegrationEventLogs.Add(@event);
 
         return _integrationEventLogContext.SaveChangesAsync();
     }
