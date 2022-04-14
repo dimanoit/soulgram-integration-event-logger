@@ -1,29 +1,15 @@
-﻿using System.Data.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Soulgram.EventLogger;
 
-public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
+public class IntegrationEventLogService : IIntegrationEventLogService
 {
     private readonly IntegrationEventLogContext _integrationEventLogContext;
-    private volatile bool _disposedValue;
 
-    public IntegrationEventLogService(DbConnection dbConnection)
+    public IntegrationEventLogService(IntegrationEventLogContext integrationEventLogContext)
     {
-        var connection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
-
-        var dbContextOptions = new DbContextOptionsBuilder<IntegrationEventLogContext>()
-            .UseSqlServer(connection)
-            .Options;
-
-        _integrationEventLogContext = new IntegrationEventLogContext(dbContextOptions);
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        _integrationEventLogContext = integrationEventLogContext;
     }
 
     public async Task<IEnumerable<IntegrationEventLogEntry>> GetPublishedFailedLogs(CancellationToken cancellationToken)
@@ -83,19 +69,5 @@ public class IntegrationEventLogService : IIntegrationEventLogService, IDisposab
         _integrationEventLogContext.IntegrationEventLogs.Update(eventLogEntry);
 
         return _integrationEventLogContext.SaveChangesAsync();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposedValue)
-        {
-            if (disposing)
-            {
-                _integrationEventLogContext?.Dispose();
-            }
-
-
-            _disposedValue = true;
-        }
     }
 }

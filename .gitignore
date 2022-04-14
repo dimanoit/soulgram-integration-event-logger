@@ -36,3 +36,5 @@ Soulgram.EventLogger/obj/Release/net6.0/Soulgram.EventLogger.GlobalUsings.g.cs
 Soulgram.EventLogger/obj/Release/net6.0/Soulgram.EventLogger.pdb
 Soulgram.EventLogger/obj/Release/net6.0/ref/Soulgram.EventLogger.dll
 Soulgram.EventLogger/obj/Release/net6.0/refint/Soulgram.EventLogger.dll
+Soulgram.EventLogger/obj/Release/Soulgram.EventLogger.1.0.1.nuspec
+Soulgram.EventLogger/bin/Release/Soulgram.EventLogger.1.0.1.nupkg
