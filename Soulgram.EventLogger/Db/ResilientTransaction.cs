@@ -6,7 +6,7 @@ public class ResilientTransaction : IResilientTransaction
 {
     private readonly DbContext _context;
 
-    ResilientTransaction(DbContext context)
+    public ResilientTransaction(DbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
